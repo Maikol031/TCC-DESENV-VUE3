@@ -30,7 +30,7 @@
                     </li>
                     <li class="flex justify-between text-gray-700">
                         <span>CEP:</span>
-                        <span>{{ items?.address?.zipcode }}</span>
+                        <span>{{ formatCEP(items?.address?.zipcode) }}</span>
                     </li>
                 </ul>
 
@@ -109,7 +109,6 @@ const weekSchedule = computed(() =>
 )
 
 function statusClass(status: string): string {
-
     const statusMap: Record<string, string> = {
         "vazia": "status-disponivel",
         "parcial": "status-parcial",
@@ -118,8 +117,11 @@ function statusClass(status: string): string {
     return statusMap[status.toLocaleLowerCase()] || ""
 }
 
-
-
+function formatCEP(cep: string | undefined): string {
+    if (!cep) return ''
+    const numbers = cep.replace(/\D/g, '')
+    return numbers.replace(/^(\d{5})(\d{3})$/, '$1-$2')
+}
 
 </script>
 <style>

@@ -23,7 +23,7 @@
                                 <div class="flex items-center gap-x-2 mt-1 md:mt-0">
                                     <LandPlot class="w-6 h-6 text-gray-500 shrink-0" />
                                     <span class="text-md text-gray-700 font-light whitespace-normal">{{
-                                        `Você se encontra à ${item.distance_km}km de distância.`
+                                        `Você se encontra à ${Number(item.distance_km).toFixed(0)}km de distância.`
                                         }}</span>
                                 </div>
                             </div>

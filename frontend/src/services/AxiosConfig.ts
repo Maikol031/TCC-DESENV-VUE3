@@ -1,4 +1,5 @@
 import axios from "axios";
+import { router } from '@/routes';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -7,13 +8,19 @@ const api = axios.create({
 
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers = {
-      ...config.headers,
-      Authorization: `Bearer ${token}`,
-    } as any;
+  // acessa o meta da rota atual
+  const requiresAuth = router.currentRoute.value.meta.requiresAuth;
+
+  if (requiresAuth) {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers = {
+        ...config.headers,
+        Authorization: `Bearer ${token}`,
+      } as any;
+    }
   }
+
   return config;
 });
 
@@ -21,7 +28,6 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // redirecionar para login, limpar token, etc
       console.warn("Não autorizado, redirecionar para login");
     }
     return Promise.reject(error);

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router"
 import home from "@/pages/home.vue"
 import teste from "@/pages/teste.vue"
+import login from "@/pages/login.vue"
 
 const routes = [
     {
@@ -8,7 +9,7 @@ const routes = [
         path: "/",
         component: home,
         meta: {
-            requiresAuth: true,
+            requiresAuth: false,
             layout: "AppLayoutDefault",
             title: "Home"
         }
@@ -23,23 +24,19 @@ const routes = [
         meta: {
             requiresAuth: true,
             layout: "AppLayoutDefault",
-            title: "Home"
+            title: "Registro"
         }
     },
     {
         name: "login",
-        path: "/sigin",
-        components: {
-            default: home,
-            Menu: () => import("@/components/Menu.vue")
-        },
+        path: "/login",
+        component: login,
         meta: {
-            requiresAuth: true,
-            layout: "AppLayoutDefault",
-            title: "Home"
+            requiresAuth: false,
+            layout: "AppLayoutBlank",
+            title: "Login"
         }
-    },
-
+    }
 ]
 
 
@@ -50,17 +47,21 @@ export const router = createRouter({
 
 
 
-// router.beforeEach((to, from, next) => {
-//   // exemplo: pegar o token do localStorage
-//   const token = localStorage.getItem("auth_token")
-//   const isAuthenticated = !!token
+router.beforeEach((to, _from, next) => {
+    const token = localStorage.getItem('token')
+    const isAuthenticated = !!token
 
-//   if (to.meta.requiresAuth && !isAuthenticated) {
-//     next({ name: "login" })
-//   } else if (to.name === "login" && isAuthenticated) {
-//     // se já estiver logado, redireciona pra dashboard
-//     next({ name: "home" })
-//   } else {
-//     next()
-//   }
-// })
+    if (to.meta.requiresAuth && !isAuthenticated) {
+        localStorage.setItem('intendedRoute', to.fullPath)
+        return next({ 
+            name: 'login',
+            query: { redirect: to.fullPath }
+        })
+    }
+
+    if (to.name === 'login' && isAuthenticated) {
+        return next({ name: 'home' })
+    }
+
+    next()
+})

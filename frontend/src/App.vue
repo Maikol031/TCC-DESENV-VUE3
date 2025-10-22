@@ -1,16 +1,16 @@
 
 <template>
   <AppLayout/>
+  <DynamicAlert />
 </template>
 
 <script setup lang="ts">
 import AppLayout from './layouts/AppLayout.vue';
-import { defineComponent } from 'vue';
+import DynamicAlert from './components/DynamicAlert.vue';
+import { provideAlert } from '@/composables/useAlert'
 
-defineComponent({
-  name: "App",
-  components: { AppLayout },
-})
+
+provideAlert()
 
 
 </script>
