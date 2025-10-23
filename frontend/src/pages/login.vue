@@ -57,8 +57,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Eye, EyeOffIcon, Home, Undo2 } from 'lucide-vue-next';
-import Auth, { type IAuth } from '@/entities/Auth';
+import { Eye, EyeOffIcon, Undo2 } from 'lucide-vue-next';
+import Auth from '@/entities/Auth';
 import { useAlert } from '@/composables/useAlert'
 import { router } from '@/routes';
 

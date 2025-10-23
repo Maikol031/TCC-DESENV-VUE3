@@ -169,7 +169,7 @@ function routeToSelected() {
   window.open(url, '_blank')
 }
 
-watch(() => props.currentLocale, (value) => {
+watch(() => props.currentLocale, () => {
   center.value = {lat: props.currentLocale.latitude, lng: props.currentLocale.longitude}
 })
 

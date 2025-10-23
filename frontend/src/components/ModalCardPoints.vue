@@ -162,9 +162,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, watch } from 'vue'
 import ModalScrollBody from './ModalScrollBody.vue';
-import MapStatus from './MapStatus.vue';
 import CollectionPoint, { type ICollectionPoint } from '@/entities/CollectionPoint';
 import { Edit, Save } from 'lucide-vue-next';
 
@@ -184,9 +183,9 @@ const collectionPointInstance = ref<CollectionPoint>(new CollectionPoint())
 
 const isEditing = ref(false)
 
-function toggleEdit() {
-    isEditing.value = !isEditing.value
-}
+// function toggleEdit() {
+//     isEditing.value = !isEditing.value
+// }
 
 const daysOfWeek = ref<Record<string, string>>({
     "0": 'Domingo',
@@ -233,11 +232,11 @@ function removeDay(idx: number) {
     collectionPointInstance.value.days.splice(idx, 1)
 }
 
-function formatCEP(cep: string | undefined): string {
-    if (!cep) return ''
-    const numbers = cep.replace(/\D/g, '')
-    return numbers.replace(/^(\d{5})(\d{3})$/, '$1-$2')
-}
+// function formatCEP(cep: string | undefined): string {
+//     if (!cep) return ''
+//     const numbers = cep.replace(/\D/g, '')
+//     return numbers.replace(/^(\d{5})(\d{3})$/, '$1-$2')
+// }
 
 
 const bucketTypes = [

@@ -40,7 +40,7 @@
   </main>
 </template>
 <script setup lang="ts">
-import { Trash2, Locate, MapPinned, InfoIcon, LandPlot } from "lucide-vue-next";
+import { Trash2, MapPinned, InfoIcon, LandPlot } from "lucide-vue-next";
 import type { ICollectionPoint } from "@/entities/CollectionPoint";
 
 
