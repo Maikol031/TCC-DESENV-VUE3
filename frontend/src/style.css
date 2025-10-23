@@ -124,3 +124,9 @@
     box-sizing: border-box;
   }
 }
+
+
+@theme {
+  --breakpoint-2sm: 75rem;
+  --breakpoint-2md: 78rem;
+}

@@ -49,10 +49,9 @@
     </Carousel>
 </template>
 <script setup lang="ts">
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
-import { onMounted, ref, watch } from "vue";
-import { Trash2, Locate, MapPinned, InfoIcon, LandPlot } from "lucide-vue-next";
+import { Trash2, MapPinned, InfoIcon, LandPlot } from "lucide-vue-next";
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import type { ICollectionPoint } from "@/entities/CollectionPoint";
 
 
@@ -60,16 +59,7 @@ interface Props {
     items: ICollectionPoint[]
 }
 
-const props = defineProps<Props>()
-
-// const data = ref<ICollectionPoint[]>()
-
-
-// watch(()=> props.items, (value)=> {
-//     console.log(value)
-//     data.value = value
-
-// })
+defineProps<Props>()
 
 
 </script>

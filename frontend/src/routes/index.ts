@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router"
 import home from "@/pages/home.vue"
-import teste from "@/pages/teste.vue"
+import gerenciarPontos from "@/pages/gerenciarPontos.vue"
 import login from "@/pages/login.vue"
 
 const routes = [
@@ -18,13 +18,13 @@ const routes = [
         name: "register",
         path: "/register",
         components: {
-            default: teste,
+            default: gerenciarPontos,
             Menu: () => import("@/components/Menu.vue")
         },
         meta: {
             requiresAuth: true,
             layout: "AppLayoutDefault",
-            title: "Registro"
+            title: "Gerenciar Pontos De Coleta"
         }
     },
     {

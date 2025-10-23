@@ -1,5 +1,5 @@
 <template>
-  <div class="w-60 h-full relative bg-green-700 hidden md:block">
+  <div class="w-70 h-full relative bg-green-700 hidden md:block">
     <!-- Título -->
     <div class="w-full flex gap-x-2 text-center border-b border-green-600 p-3">
       <Recycle class="w-8 h-8 text-white" />
@@ -9,10 +9,10 @@
     <!-- Itens do menu -->
     <div class="flex flex-col items-center gap-2 mt-4">
       <router-link v-for="item in rotas" :key="item.name" :to="item.name === 'login' ? '' : { name: item.name }" :class="[
-        'flex items-center justify-start gap-3 w-56 rounded-md h-10 font-medium text-white px-4 transform transition-all duration-200 hover:scale-105 ',
+        'flex items-center justify-start gap-3 p-6 w-64 rounded-md h-10 font-medium text-white px-4 transform transition-all duration-200 hover:scale-105 ',
         route.name === item.name ? 'bg-white/30 scale-102 shadow-xl' : ''
       ]" @click="item.label === 'logout' ? openModalConfirmLogout() : openModalPreLogin(item.name)">
-        <component :is="item.icon" class="w-5 h-5 text-white" />
+        <component :is="item.icon" class="w-5 h-5 text-white shrink-0" />
         <span class="capitalize">{{ item.label }}</span>
       </router-link>
     </div>
@@ -93,7 +93,7 @@ const rotas = computed(() => [
       icon: House,
     }] : []),
  ...(isAuthenticated.value ? [{
-      label: "register",
+      label: "gerenciar pontos de coleta",
       name: "register",
       icon: ClipboardPenLine,
     }] : []),

@@ -11,13 +11,13 @@ export interface Bucket {
 
 
 export interface PointOpeningHour {
-  id: number
-  point_id: number
+  id?: number
+  point_id?: number
   day_of_week: string
   opening_hour: string
   closing_hour: string
-  created_at: string
-  updated_at: string
+  created_at?: string
+  updated_at?: string
 }
 
 
@@ -46,7 +46,7 @@ export interface ICollectionPoint {
   distance_km?: number
   created_at: string
   updated_at: string
-  address: Address
+  address: Partial<Address>
   days: PointOpeningHour[]
   buckets: Bucket[]
 }
@@ -57,8 +57,8 @@ type QueryParam = { latitude?: number, longitude?: number, organization_id?: num
 export default class CollectionPoint implements ICollectionPoint {
 
   id!: number
-  name!: string
-  phone!: string
+  name: string = ''
+  phone: string = ''
   latitude?: number
   longitude?: number
   organization_id!: number
@@ -66,9 +66,12 @@ export default class CollectionPoint implements ICollectionPoint {
   distance_km?: number
   created_at!: string
   updated_at!: string
-  address!: Address
-  days!: PointOpeningHour[]
-  buckets!: Bucket[]
+  address: Partial<Address> = {
+    city: '',
+    street: ''
+  }
+  days: PointOpeningHour[] = []
+  buckets: Bucket[] = []
 
 
   constructor() { }
