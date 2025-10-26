@@ -178,7 +178,7 @@ import CollectionPoint, { type ICollectionPoint, type PointOpeningHour } from '@
 import ModalScrollBody from './ModalScrollBody.vue';
 import { Edit, Save } from 'lucide-vue-next';
 import { ref, watch } from 'vue'
-import Buckets, { type Bucket } from '@/entities/Buckets';
+import Buckets from '@/entities/Buckets';
 
 interface Props {
     items?: ICollectionPoint
