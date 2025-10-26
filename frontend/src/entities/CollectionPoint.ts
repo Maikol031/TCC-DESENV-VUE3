@@ -1,14 +1,5 @@
 import api from "@/services/AxiosConfig"
-
-export interface Bucket {
-  id: number
-  point_id: number
-  type: string
-  status: string
-  created_at: string
-  updated_at: string
-}
-
+import type { Bucket } from "./Buckets"
 
 export interface PointOpeningHour {
   id?: number
@@ -77,9 +68,22 @@ export default class CollectionPoint implements ICollectionPoint {
   constructor() { }
 
   async get(query?: QueryParam) {
-    return await api.get("http://143.198.27.246/api/v1/points", {
+    return await api.get("/api/v1/points", {
       params: query
     })
+  }
+
+  async create(body: ICollectionPoint) {
+    return await api.post("/api/v1/points", body)
+  }
+
+  async delete(id: number) {
+    return await api.delete(`/api/v1/points/${id}`)
+  }
+
+  async update(id: number, body: ICollectionPoint)
+  {
+    return await api.put(`/api/v1/points/${id}`, body)
   }
 
 }

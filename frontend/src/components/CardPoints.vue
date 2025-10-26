@@ -21,26 +21,31 @@
           </div>
 
           <div class="flex items-center gap-x-2 mt-1 md:mt-0">
-            <LandPlot class="w-6 h-6 text-gray-500 shrink-0" />
-            <span class="text-md text-gray-700 font-light whitespace-normal">{{
-              `Você se encontra ${Number(item.distance_km).toFixed(0)} à km de distância.`
-            }}</span>
+            <PhoneCall class="w-6 h-6 text-gray-500 shrink-0" />
+            <span class="text-md text-gray-700 font-light whitespace-normal">{{ formatPhone(Number(item.phone)) }}</span>
           </div>
 
         </div>
       </div>
-      <button @click="$emit('item', item)"
-        class="w-full flex items-center justify-center gap-2 bg-green-700 hover:bg-green-600 text-white font-medium py-3 rounded-b-xl transition cursor-pointer">
-        <InfoIcon class="w-5 h-5 text-white" />
-        Ver Detalhes
-      </button>
+      <div class="flex">
+        <button @click="$emit('item', item)"
+          class="w-full flex items-center justify-center gap-2 bg-green-700 hover:bg-green-600 text-white font-medium py-3 rounded-bl-xl transition cursor-pointer">
+          <InfoIcon class="w-5 h-5 text-white" />
+          Ver Detalhes
+        </button>
+        <button @click="$emit('delete', item.id)"
+          class="w-full flex items-center justify-center gap-2 bg-red-700 hover:bg-red-600 text-white font-medium py-3 rounded-br-xl transition cursor-pointer">
+          <Trash2 class="w-5 h-5 text-white" />
+          Excluir
+        </button>
+      </div>
     </div>
 
 
   </main>
 </template>
 <script setup lang="ts">
-import { Trash2, MapPinned, InfoIcon, LandPlot } from "lucide-vue-next";
+import { Trash2, MapPinned, InfoIcon, PhoneCall } from "lucide-vue-next";
 import type { ICollectionPoint } from "@/entities/CollectionPoint";
 
 
@@ -49,6 +54,21 @@ interface Props {
 }
 
 defineProps<Props>()
+
+
+function formatPhone(phone: string | number): string {
+  const onlyDigits = String(phone).replace(/\D/g, '')
+  if (onlyDigits.length === 11) {
+    // Celular com DDD: (99) 99999-9999
+    return onlyDigits.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
+  }
+  if (onlyDigits.length === 10) {
+    // Fixo com DDD: (99) 9999-9999
+    return onlyDigits.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3')
+  }
+  return phone ? String(phone) : ''
+}
+
 
 </script>
 <style></style>

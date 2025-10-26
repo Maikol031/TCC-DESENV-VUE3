@@ -1,7 +1,23 @@
 <template>
-    <ModalScrollBody :title="items?.name ?? ''" :open="isModalOpen" @update:open="$emit('update:isModalOpen', $event)" :enable-footer="true" :enable-input-name="method === 'add'">
+    <ModalScrollBody v-model:open="open" v-model:name="modalName" :title="items?.name ?? ''" :enable-footer="true"
+        :enable-input-name="method === 'add'">
         <template #body>
             <div class="flex flex-col gap-y-4">
+                <hr>
+                <div>
+                    <div class="flex gap-x-4 items-center justify-between">
+                        <span class="text-gray-700 text-xl font-medium">Contato</span>
+                    </div>
+                    <ul class="px-2 space-y-1 list-none">
+                        <li class="flex justify-between items-center text-gray-700">
+                            <span>Telefone:</span>
+                            <input v-model="collectionPointInstance.phone"
+                                class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
+                                :disabled="!isEditing || userRole === 'manager'" />
+                        </li>
+                    </ul>
+                </div>
+
                 <hr>
                 <div>
                     <div class="flex gap-x-4 items-center justify-between">
@@ -10,41 +26,42 @@
                 </div>
                 <ul class="px-2 space-y-1 list-none">
                     <li class="flex justify-between items-center text-gray-700">
+                        <span>CEP:</span>
+                        <input v-model="collectionPointInstance.address.zipcode"
+                            class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
+                            :disabled="!isEditing || userRole === 'manager'" />
+                    </li>
+                    <li class="flex justify-between items-center text-gray-700">
                         <span>Rua:</span>
                         <input v-model="collectionPointInstance.address.street"
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
-                            :disabled="!isEditing" />
+                            :disabled="!isEditing || userRole === 'manager'" />
                     </li>
                     <li class="flex justify-between items-center text-gray-700">
                         <span>Número:</span>
                         <input v-model="collectionPointInstance.address.number"
-                            class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-24 disabled:bg-gray-100 enabled:bg-white"
-                            :disabled="!isEditing" />
+                            class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
+                            :disabled="!isEditing || userRole === 'manager'" />
                     </li>
                     <li class="flex justify-between items-center text-gray-700">
                         <span>Bairro:</span>
                         <input v-model="collectionPointInstance.address.neighborhood"
-                            class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-40 disabled:bg-gray-100 enabled:bg-white"
-                            :disabled="!isEditing" />
+                            class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
+                            :disabled="!isEditing || userRole === 'manager'" />
                     </li>
                     <li class="flex justify-between items-center text-gray-700">
                         <span>Cidade:</span>
                         <input v-model="collectionPointInstance.address.city"
-                            class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-44 disabled:bg-gray-100 enabled:bg-white"
-                            :disabled="!isEditing" />
+                            class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
+                            :disabled="!isEditing || userRole === 'manager'" />
                     </li>
                     <li class="flex justify-between items-center text-gray-700">
                         <span>Estado:</span>
                         <input v-model="collectionPointInstance.address.state"
-                            class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-24 disabled:bg-gray-100 enabled:bg-white"
-                            :disabled="!isEditing" />
+                            class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
+                            :disabled="!isEditing || userRole === 'manager'" />
                     </li>
-                    <li class="flex justify-between items-center text-gray-700">
-                        <span>CEP:</span>
-                        <input v-model="collectionPointInstance.address.zipcode"
-                            class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-32 disabled:bg-gray-100 enabled:bg-white"
-                            :disabled="!isEditing" />
-                    </li>
+
                 </ul>
                 <hr>
                 <div class="flex gap-x-4 items-center justify-between">
@@ -133,27 +150,22 @@
                     </div>
                 </div>
             </div>
-            
+
         </template>
         <template #actions>
 
             <div class="flex justify-end w-full">
-                <button
-                v-if="isEditing === false"
-                class="flex gap-x-3 items-center bg-blue-600 text-white p-2 rounded-sm cursor-pointer hover:bg-blue-700 duration-300"
-                    @click="isEditing = !isEditing"> 
-                        <Edit class="text-white w-5 h-5"
-                            v-if="method === 'edit'" 
-                        />
-                        Editar
+                <button v-if="isEditing === false && method === 'edit'"
+                    class="flex gap-x-3 items-center bg-blue-600 text-white p-2 rounded-sm cursor-pointer hover:bg-blue-700 duration-300"
+                    @click="isEditing = !isEditing">
+                    <Edit class="text-white w-5 h-5" />
+                    Editar
                 </button>
-                <button 
-                v-if="isEditing === true"
-                class="flex gap-x-3 items-center bg-green-600 text-white p-2 rounded-sm cursor-pointer hover:bg-green-700 duration-300"
-                    @click="isEditing = !isEditing"> 
-                        <Save class="text-white w-5 h-5"                             
-                        />
-                        Salvar
+                <button v-if="isEditing === true || method === 'add'"
+                    class="flex gap-x-3 items-center bg-green-600 text-white p-2 rounded-sm cursor-pointer hover:bg-green-700 duration-300"
+                    @click="submitForm(method)">
+                    <Save class="text-white w-5 h-5" />
+                    Salvar
                 </button>
             </div>
 
@@ -162,30 +174,57 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import CollectionPoint, { type ICollectionPoint, type PointOpeningHour } from '@/entities/CollectionPoint';
 import ModalScrollBody from './ModalScrollBody.vue';
-import CollectionPoint, { type ICollectionPoint } from '@/entities/CollectionPoint';
 import { Edit, Save } from 'lucide-vue-next';
+import { ref, watch } from 'vue'
+import Buckets, { type Bucket } from '@/entities/Buckets';
 
 interface Props {
-    isModalOpen: boolean
     items?: ICollectionPoint
+    userRole?: "admin" | "manager" | "organization"
     method: "add" | "edit"
 }
 
+const open = defineModel<boolean>('open')
+const modalName = ref('')
+
+
+
 const props = defineProps<Props>()
-defineEmits<{
-    'update:isModalOpen': [value: boolean]
-    'trace': any
-}>()
+
 
 const collectionPointInstance = ref<CollectionPoint>(new CollectionPoint())
+const bucketsInstance = ref<Buckets>(new Buckets())
 
 const isEditing = ref(false)
 
-// function toggleEdit() {
-//     isEditing.value = !isEditing.value
-// }
+
+watch(() => collectionPointInstance.value.address.zipcode, async (cep) => {
+    const cleanCep = cep ? cep.replace(/\D/g, '') : ""
+    if (cleanCep.length === 8) {
+        const response = await fetch(`https://viacep.com.br/ws/${cleanCep}/json/`)
+        const data = await response.json()
+
+        if (!data.erro) {
+            collectionPointInstance.value.address.street = data.logradouro || ''
+            collectionPointInstance.value.address.neighborhood = data.bairro || ''
+            collectionPointInstance.value.address.city = data.localidade || ''
+            collectionPointInstance.value.address.state = data.uf || ''
+        }
+
+        // Busca latitude/longitude (Nominatim)
+        const geoResp = await fetch(
+            `https://nominatim.openstreetmap.org/search?street=${encodeURIComponent(data.logradouro)}&city=${encodeURIComponent(data.localidade)}&state=${encodeURIComponent(data.uf)}&country=Brasil&postalcode=${cleanCep}&format=json`
+        )
+        const geoData = await geoResp.json()
+        if (geoData.length) {
+            collectionPointInstance.value.latitude = geoData[0].lat
+            collectionPointInstance.value.longitude = geoData[0].lon
+        }
+    }
+})
+
 
 const daysOfWeek = ref<Record<string, string>>({
     "0": 'Domingo',
@@ -195,17 +234,7 @@ const daysOfWeek = ref<Record<string, string>>({
     "4": 'Quinta-feira',
     "5": 'Sexta-feira',
     "6": 'Sábado',
-
 })
-
-// function statusClass(status: string): string {
-//     const statusMap: Record<string, string> = {
-//         "vazia": "status-disponivel",
-//         "parcial": "status-parcial",
-//         "lotada": "status-indisponivel",
-//     }
-//     return statusMap[status.toLocaleLowerCase()] || ""
-// }
 
 const newDay = ref<{ day_of_week: string | "", opening_hour: string, closing_hour: string }>({
     day_of_week: "",
@@ -227,17 +256,9 @@ function addDay() {
     }
 }
 
-
 function removeDay(idx: number) {
     collectionPointInstance.value.days.splice(idx, 1)
 }
-
-// function formatCEP(cep: string | undefined): string {
-//     if (!cep) return ''
-//     const numbers = cep.replace(/\D/g, '')
-//     return numbers.replace(/^(\d{5})(\d{3})$/, '$1-$2')
-// }
-
 
 const bucketTypes = [
     'plástico',
@@ -258,12 +279,8 @@ function addBucket() {
         !collectionPointInstance.value.buckets.some(b => b.type === newBucket.value.type)
     ) {
         collectionPointInstance.value.buckets.push({
-            id: 0, // ou null, backend vai criar
-            point_id: collectionPointInstance.value.id || 0,
             type: newBucket.value.type,
             status: newBucket.value.status,
-            created_at: '',
-            updated_at: '',
         })
         newBucket.value = { type: '', status: '' }
     }
@@ -282,15 +299,63 @@ function statusClass(status: string): string {
     return statusMap[status] || 'bg-gray-400'
 }
 
-watch(() => props.isModalOpen, () => {
-    if (props.method === "edit") {
-        Object.assign(collectionPointInstance.value, props.items)
-        return
-    }
 
-    collectionPointInstance.value = new CollectionPoint()
-    isEditing.value = true
-}, { immediate: true, deep: true })
+function formatDaysHours(days: PointOpeningHour[] = []): PointOpeningHour[] {
+    const formatHour = (hour?: string): string =>
+        typeof hour === 'string'
+            ? hour.length > 5
+                ? hour.slice(0, 5)
+                : hour
+            : '';
+
+    return days.map(day => ({
+        ...day,
+        opening_hour: formatHour(day.opening_hour),
+        closing_hour: formatHour(day.closing_hour),
+    }));
+}
+
+const submitForm = async (method: "add" | "edit") => {
+    if (method === 'add') {
+        const { data } = await collectionPointInstance.value.create({ ...collectionPointInstance.value, name: modalName.value })
+        for (let bucket of collectionPointInstance.value.buckets) {
+            await bucketsInstance.value.createBuckets(data.id, bucket)
+        }
+    }
+    if (method === 'edit') {
+        const { data } = await collectionPointInstance.value.update(
+            collectionPointInstance.value.id,
+            {
+                ...collectionPointInstance.value,
+                days: collectionPointInstance.value.days.length
+                    ? formatDaysHours(collectionPointInstance.value.days)
+                    : collectionPointInstance.value.days
+            }
+        )
+
+        for (let bucket of collectionPointInstance.value.buckets) {
+            if (bucket.id) {
+                await bucketsInstance.value.updateBuckets(data.id, bucket.id, bucket)
+            } else {
+                await bucketsInstance.value.createBuckets(data.id, bucket)
+            }
+        }
+    }
+}
+
+watch(open, (isOpen) => {
+    if (isOpen) {
+        if (props.method === 'edit') {
+            Object.assign(collectionPointInstance.value, props.items)
+            isEditing.value = false
+        }
+        if (props.method === 'add') {
+            collectionPointInstance.value = new CollectionPoint()
+            isEditing.value = true
+        }
+    }
+})
+
 
 </script>
 

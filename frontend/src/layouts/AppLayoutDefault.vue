@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col md:flex-row min-h-[100vh]">
-        <aside>
+        <aside class="mb-15 md:mb-0">
             <Menu />
         </aside>
         <main class="break-words overflow-x-hidden bg-gray-100 p-4 h-[100vh] w-full">

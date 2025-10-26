@@ -15,7 +15,7 @@
 
     </div>
 
-    <ModalCardHome v-model:isModalOpen="isModalOpen" :items="selectedCard" @trace="trace($event)" />
+    <ModalCardHome v-model:open="isModalOpen" :items="selectedCard" @trace="trace($event)" />
 </template>
 <script setup lang="ts">
 import DynamicCarousel from '@/components/DynamicCarousel.vue';

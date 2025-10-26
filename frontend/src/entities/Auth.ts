@@ -20,10 +20,11 @@ export default class Auth implements IAuth {
 
     async login(credentials: IAuth) {
         try {
-            const response = await api.post('http://143.198.27.246/api/v1/auth/login', credentials)
+            const response = await api.post('/api/v1/auth/login', credentials)
 
             localStorage.setItem('token', response.data.token)
-            // localStorage.setItem('user', JSON.stringify(response.data.user))
+            sessionStorage.setItem('role', response.data.roles[0])
+
             this.showAlert?.('success', 'Login realizado com sucesso!')
 
             this.router?.push({ name: 'home' })

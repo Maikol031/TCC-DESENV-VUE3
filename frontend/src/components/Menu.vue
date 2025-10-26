@@ -18,7 +18,7 @@
     </div>
   </div>
   <!-- Navbar Mobile -->
-  <div class="bg-green-700 md:hidden p-3 flex items-center justify-between text-white">
+  <div class="bg-green-700 md:hidden p-3 flex w-full fixed items-center justify-between text-white">
     <div class="flex gap-x-2">
       <Recycle class="w-8 h-8" />
       <h1 class="text-3xl font-bold">Eco Ponto</h1>
@@ -41,7 +41,7 @@
 
   <!-- Menu dropdown mobile -->
   <transition name="slide-down">
-    <div v-if="menuAberto" class="absolute z-50 top-13 left-0 w-full bg-green-700 flex flex-col items-center md:hidden">
+    <div v-if="menuAberto" class="fixed z-50 top-13 left-0 w-full bg-green-700 flex flex-col items-center md:hidden">
       <router-link v-for="item in rotas" :key="item.name" :to="item.name === 'login' ? '' : { name: item.name }" class="flex items-center justify-start w-full h-12 font-medium text-white px-4
                transform transition-all duration-200 hover:scale-105 border-b-1 border-gray-200 gap-x-2"
         @click="item.label === 'logout' ? openModalConfirmLogout() : openModalPreLogin(item.name)">

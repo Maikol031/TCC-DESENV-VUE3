@@ -1,5 +1,5 @@
 <template>
-    <ModalScrollBody :title="items?.name ?? ''" :open="isModalOpen" @update:open="$emit('update:isModalOpen', $event)">
+    <ModalScrollBody v-model:open="open" :title="items?.name ?? ''">
         <template #body>
 
             <div class="flex flex-col gap-y-4">
@@ -77,10 +77,10 @@ import { computed } from 'vue'
 import type { ICollectionPoint } from '@/entities/CollectionPoint';
 
 interface Props {
-    isModalOpen: boolean
     items?: ICollectionPoint
 }
 
+const open = defineModel<boolean>('open')
 
 const props = defineProps<Props>()
 defineEmits<{
