@@ -66,8 +66,8 @@ const { showAlert } = useAlert()
 const showPassword = ref(false)
 const authInstance = ref<Auth>(new Auth(showAlert, router))
 
-const login = async () => {
-    await authInstance.value.login({
+const login = () => {
+    authInstance.value.login({
         email: authInstance.value.email,
         password: authInstance.value.password
     })
