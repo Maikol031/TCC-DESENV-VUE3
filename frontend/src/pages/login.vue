@@ -67,8 +67,12 @@ const showPassword = ref(false)
 const authInstance = ref<Auth>(new Auth(showAlert, router))
 
 const login = async () => {
-    await authInstance.value.login(authInstance.value)
+    await authInstance.value.login({
+        email: authInstance.value.email,
+        password: authInstance.value.password
+    })
 }
+
 
 const goHome = () => {
     router.push({ name: 'home' })
