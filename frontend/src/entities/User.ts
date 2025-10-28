@@ -30,7 +30,7 @@ export default class User implements IUser {
 
 
     async create(body: IUser) {
-        await api.post("/api/v1/users", body)
+        await api.post("/api/v1/auth/register", body)
     }
 
 
