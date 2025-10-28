@@ -109,7 +109,7 @@ const inviteUser = async (email: any) => {
  await authInstance.value.inviteUser(email)
 }
 
-const role = sessionStorage.getItem("role");
+const role = localStorage.getItem("role");
 
 
 const isAuthenticated = computed(() => {

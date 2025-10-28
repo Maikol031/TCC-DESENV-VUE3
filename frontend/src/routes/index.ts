@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router"
-import home from "@/pages/home.vue"
 import gerenciarPontos from "@/pages/gerenciarPontos.vue"
+import registerUser from "@/pages/registerUser.vue"
 import login from "@/pages/login.vue"
+import home from "@/pages/home.vue"
 
 const routes = [
     {
@@ -35,6 +36,16 @@ const routes = [
             requiresAuth: false,
             layout: "AppLayoutBlank",
             title: "Login"
+        }
+    },
+    {
+        name: "registeruser",
+        path: "/newaccount",
+        component: registerUser,
+        meta: {
+            requiresAuth: false,
+            layout: "AppLayoutBlank",
+            title: "NewAcount"
         }
     }
 ]

@@ -36,7 +36,7 @@ const selectedCard = ref<ICollectionPoint>();
 const modalMethod = ref<'edit' | 'add'>('add')
 type UserRole = "admin" | "organization" | "manager";
 
-const role = sessionStorage.getItem("role");
+const role = localStorage.getItem("role");
 const userRole: UserRole | undefined =
   role === "admin" || role === "organization" || role === "manager"
     ? role

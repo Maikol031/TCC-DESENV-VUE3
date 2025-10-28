@@ -23,7 +23,7 @@ export default class Auth implements IAuth {
             const response = await api.post('/api/v1/auth/login', credentials)
 
             localStorage.setItem('token', response.data.token)
-            sessionStorage.setItem('role', response.data.roles[0])
+            localStorage.setItem('role', response.data.roles[0])
 
             this.showAlert?.('success', 'Login realizado com sucesso!')
 
@@ -48,7 +48,7 @@ export default class Auth implements IAuth {
     logout() {
         localStorage.removeItem('token')
         localStorage.removeItem('user')
-        sessionStorage.removeItem('role')
+        localStorage.removeItem('role')
         this.router?.push({ name: 'login' })
     }
 

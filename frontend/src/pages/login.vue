@@ -3,7 +3,7 @@
         <div class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-lg mx-auto">
             <button @click="goHome"
                 class="w-10 flex items-center justify-center gap-2 bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-gray-200 transition-all border border-gray-300 cursor-pointer">
-                <Undo2 class="w-5 h-5" />
+                <House class="w-5 h-5" />
             </button>
             <h1 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">
                 Login<br />
@@ -57,7 +57,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Eye, EyeOffIcon, Undo2 } from 'lucide-vue-next';
+import { Eye, EyeOffIcon, House } from 'lucide-vue-next';
 import Auth from '@/entities/Auth';
 import { useAlert } from '@/composables/useAlert'
 import { router } from '@/routes';
