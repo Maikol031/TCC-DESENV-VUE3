@@ -7,15 +7,40 @@
     </div>
 
     <!-- Itens do menu -->
-    <div class="flex flex-col items-center gap-2 mt-4">
-      <router-link v-for="item in rotas" :key="item.name" :to="item.name === 'login' ? '' : { name: item.name }" :class="[
-        'flex items-center justify-start gap-3 p-6 w-64 rounded-md h-10 font-medium text-white px-4 transform transition-all duration-200 hover:scale-105 ',
+    <div class="w-70 h-screen fixed top-0 left-0 flex flex-col bg-green-700">
+  <!-- Título -->
+  <div class="w-full flex gap-x-2 text-center border-b border-green-600 p-3">
+    <Recycle class="w-8 h-8 text-white" />
+    <h1 class="text-white font-bold text-3xl">Eco Ponto</h1>
+  </div>
+
+  <!-- Bloco dos links com overflow caso exceda -->
+  <div class="flex-1 overflow-y-auto flex flex-col items-center gap-2 mt-4">
+    <router-link
+      v-for="item in rotas"
+      :key="item.name"
+      :to="item.name === 'login' ? '' : { name: item.name }"
+      :class="[
+        'flex items-center justify-start gap-3 p-6 w-64 rounded-md h-10 font-medium text-white px-4 transform transition-all duration-200 hover:scale-105',
         route.name === item.name ? 'bg-white/30 scale-102 shadow-xl' : ''
-      ]" @click="item.label === 'logout' ? openModalConfirmLogout() : openModalPreLogin(item.name)">
-        <component :is="item.icon" class="w-5 h-5 text-white shrink-0" />
-        <span class="capitalize">{{ item.label }}</span>
-      </router-link>
-    </div>
+      ]"
+      @click="item.label === 'logout' ? openModalConfirmLogout() : openModalPreLogin(item.name)"
+    >
+      <component :is="item.icon" class="w-5 h-5 text-white shrink-0" />
+      <span class="capitalize">{{ item.label }}</span>
+    </router-link>
+  </div>
+
+  <!-- Botão colado no fim -->
+  <div class="w-full px-6 pb-6">
+    <button v-if="role === 'organization' || role === 'admin'" @click="isOpenModalInvite = !isOpenModalInvite" class="bg-green-800 hover:bg-green-900 flex items-center justify-center gap-x-4 w-full rounded py-2 text-white font-medium cursor-pointer">
+      <UserPlus class="w-5 h-5"/>
+      <span>
+        Convidar Usuário
+      </span>
+    </button>
+  </div>
+</div>
   </div>
   <!-- Navbar Mobile -->
   <div class="bg-green-700 md:hidden p-3 flex w-full fixed items-center justify-between text-white">
@@ -48,37 +73,43 @@
         <component :is="item.icon" class="w-5 h-5 text-white" />
         <span class="capitalize">{{ item.label }}</span>
       </router-link>
+
+      <button v-if="role === 'organization' || role === 'admin'" @click="isOpenModalInvite = !isOpenModalInvite" class="bg-green-700 hover:bg-green-900 flex items-center gap-x-4 ml-9 py-2 w-full rounded text-white font-medium cursor-pointer">
+        <UserPlus class="w-5 h-5"/>
+        <span>Convidar Usuário</span>
+      </button>
     </div>
   </transition>
-    <ModalPreLogin 
-    v-model:is-open="isOpenModal"
-    @update:is-open="isOpenModal = $event"
-    @continue="handleContinue()"
-    />
-    <ModalConfirmLogout
-      v-model:is-open="isOpenModalLogout"
-      @update:is-open="isOpenModalLogout = $event"
-      @confirm="handleConfirmLogout()"
-    />
-
+  <ModalPreLogin v-model:is-open="isOpenModal" @update:is-open="isOpenModal = $event" @continue="handleContinue()" />
+  <ModalConfirmLogout v-model:is-open="isOpenModalLogout" @update:is-open="isOpenModalLogout = $event"
+    @confirm="handleConfirmLogout()" />
+  <ModalInviteUser :is-open="isOpenModalInvite" @invite="inviteUser($event)" @update:is-open="isOpenModalInvite = $event" />
 
 </template>
 
 <script setup lang="ts">
-import { House, ClipboardPenLine, LogIn, Recycle, LogOut } from "lucide-vue-next";
+import { House, ClipboardPenLine, LogIn, Recycle, LogOut, UserPlus } from "lucide-vue-next";
 import ModalConfirmLogout from "./ModalConfirmLogout.vue";
 import { useRoute, useRouter } from 'vue-router';
 import ModalPreLogin from "./ModalPreLogin.vue";
 import { computed, ref } from "vue";
 import Auth from "@/entities/Auth";
+import ModalInviteUser from "./ModalInviteUser.vue";
 
 
 const route = useRoute();
 const isOpenModal = ref<boolean>(false)
 const isOpenModalLogout = ref<boolean>(false)
-const router = useRouter(); 
+const isOpenModalInvite = ref<boolean>(false)
+const router = useRouter();
 const menuAberto = ref(false);
 const authInstance = ref<Auth>(new Auth(undefined, router))
+
+const inviteUser = async (email: any) => {
+ await authInstance.value.inviteUser(email)
+}
+
+const role = sessionStorage.getItem("role");
 
 
 const isAuthenticated = computed(() => {
@@ -88,19 +119,19 @@ const isAuthenticated = computed(() => {
 
 const rotas = computed(() => [
   ...(!(menuAberto.value && route.name === 'home') ? [{
-      label: "home",
-      name: "home",
-      icon: House,
-    }] : []),
- ...(isAuthenticated.value ? [{
-      label: "gerenciar pontos de coleta",
-      name: "register",
-      icon: ClipboardPenLine,
-    }] : []),
+    label: "home",
+    name: "home",
+    icon: House,
+  }] : []),
+  ...(isAuthenticated.value && !(menuAberto.value && route.name === 'register') ? [{
+    label: "gerenciar pontos de coleta",
+    name: "register",
+    icon: ClipboardPenLine,
+  }] : []),
   {
     label: isAuthenticated.value ? "logout" : "login",
     name: "login",
-    icon: isAuthenticated.value ? LogOut : LogIn ,
+    icon: isAuthenticated.value ? LogOut : LogIn,
   },
 ]);
 
@@ -121,10 +152,10 @@ const handleConfirmLogout = () => {
 
 const openModalPreLogin = (name: string, deviceType?: "mobile" | "desktop"): void => {
 
-  if(deviceType === 'mobile') {
+  if (deviceType === 'mobile') {
     menuAberto.value = false
   }
-  if(name === 'login') {
+  if (name === 'login') {
     isOpenModal.value = true
     return
   }

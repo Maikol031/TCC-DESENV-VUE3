@@ -2,7 +2,7 @@
     <ModalScrollBody v-model:open="open" v-model:name="modalName" :title="items?.name ?? ''" :enable-footer="true"
         :enable-input-name="method === 'add'">
         <template #body>
-            <div class="flex flex-col gap-y-4">
+            <form id="mainForm" ref="mainForm" @submit.prevent="submitForm(method)" class="flex flex-col gap-y-4">
                 <hr>
                 <div>
                     <div class="flex gap-x-4 items-center justify-between">
@@ -11,7 +11,7 @@
                     <ul class="px-2 space-y-1 list-none">
                         <li class="flex justify-between items-center text-gray-700">
                             <span>Telefone:</span>
-                            <input v-model="collectionPointInstance.phone"
+                            <input v-model="collectionPointInstance.phone" required
                                 class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
                                 :disabled="!isEditing || userRole === 'manager'" />
                         </li>
@@ -27,37 +27,37 @@
                 <ul class="px-2 space-y-1 list-none">
                     <li class="flex justify-between items-center text-gray-700">
                         <span>CEP:</span>
-                        <input v-model="collectionPointInstance.address.zipcode"
+                        <input v-model="collectionPointInstance.address.zipcode" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
                             :disabled="!isEditing || userRole === 'manager'" />
                     </li>
                     <li class="flex justify-between items-center text-gray-700">
                         <span>Rua:</span>
-                        <input v-model="collectionPointInstance.address.street"
+                        <input v-model="collectionPointInstance.address.street" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
                             :disabled="!isEditing || userRole === 'manager'" />
                     </li>
                     <li class="flex justify-between items-center text-gray-700">
                         <span>Número:</span>
-                        <input v-model="collectionPointInstance.address.number"
+                        <input v-model="collectionPointInstance.address.number" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
                             :disabled="!isEditing || userRole === 'manager'" />
                     </li>
                     <li class="flex justify-between items-center text-gray-700">
                         <span>Bairro:</span>
-                        <input v-model="collectionPointInstance.address.neighborhood"
+                        <input v-model="collectionPointInstance.address.neighborhood" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
                             :disabled="!isEditing || userRole === 'manager'" />
                     </li>
                     <li class="flex justify-between items-center text-gray-700">
                         <span>Cidade:</span>
-                        <input v-model="collectionPointInstance.address.city"
+                        <input v-model="collectionPointInstance.address.city" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
                             :disabled="!isEditing || userRole === 'manager'" />
                     </li>
                     <li class="flex justify-between items-center text-gray-700">
                         <span>Estado:</span>
-                        <input v-model="collectionPointInstance.address.state"
+                        <input v-model="collectionPointInstance.address.state" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
                             :disabled="!isEditing || userRole === 'manager'" />
                     </li>
@@ -74,7 +74,7 @@
                         <span class="w-32 text-end">{{ item.opening_hour.slice(0, 5) }} - {{ item.closing_hour.slice(0,
                             5) }}</span>
                         <button v-if="isEditing" class="ml-2 bg-red-500 text-white rounded px-2 py-1 hover:bg-red-700"
-                            @click="removeDay(idx)">
+                            @click="removeDay(idx, item)">
                             Remover
                         </button>
                     </li>
@@ -114,7 +114,7 @@
                                 {{ bucket.type }}
                             </span>
                             <button class="ml-2 bg-red-500 text-white rounded px-2 py-1 hover:bg-red-700"
-                                @click="removeBucket(idx)" v-if="isEditing">Remover</button>
+                                @click="removeBucket(idx, bucket)" v-if="isEditing">Remover</button>
                             <span>|</span>
                         </template>
                     </div>
@@ -149,7 +149,7 @@
                         </span>
                     </div>
                 </div>
-            </div>
+            </form>
 
         </template>
         <template #actions>
@@ -162,8 +162,10 @@
                     Editar
                 </button>
                 <button v-if="isEditing === true || method === 'add'"
+                    type="submit"
+                    form="mainForm"
                     class="flex gap-x-3 items-center bg-green-600 text-white p-2 rounded-sm cursor-pointer hover:bg-green-700 duration-300"
-                    @click="submitForm(method)">
+                >
                     <Save class="text-white w-5 h-5" />
                     Salvar
                 </button>
@@ -178,7 +180,7 @@ import CollectionPoint, { type ICollectionPoint, type PointOpeningHour } from '@
 import ModalScrollBody from './ModalScrollBody.vue';
 import { Edit, Save } from 'lucide-vue-next';
 import { ref, watch } from 'vue'
-import Buckets from '@/entities/Buckets';
+import Buckets, { type Bucket } from '@/entities/Buckets';
 
 interface Props {
     items?: ICollectionPoint
@@ -188,10 +190,9 @@ interface Props {
 
 const open = defineModel<boolean>('open')
 const modalName = ref('')
-
-
-
+const mainForm = ref(null)
 const props = defineProps<Props>()
+const emit = defineEmits(["close"])
 
 
 const collectionPointInstance = ref<CollectionPoint>(new CollectionPoint())
@@ -256,7 +257,8 @@ function addDay() {
     }
 }
 
-function removeDay(idx: number) {
+function removeDay(idx: number, item: any) {
+    console.log(item)
     collectionPointInstance.value.days.splice(idx, 1)
 }
 
@@ -286,7 +288,10 @@ function addBucket() {
     }
 }
 
-function removeBucket(idx: number) {
+const deleteBuckets = ref<Bucket[]>([])
+function removeBucket(idx: number, item: any) {
+    if(item.id) deleteBuckets.value.push(item.id)
+
     collectionPointInstance.value.buckets.splice(idx, 1)
 }
 
@@ -316,11 +321,14 @@ function formatDaysHours(days: PointOpeningHour[] = []): PointOpeningHour[] {
 }
 
 const submitForm = async (method: "add" | "edit") => {
+
     if (method === 'add') {
         const { data } = await collectionPointInstance.value.create({ ...collectionPointInstance.value, name: modalName.value })
         for (let bucket of collectionPointInstance.value.buckets) {
             await bucketsInstance.value.createBuckets(data.id, bucket)
         }
+        emit("close", true)
+        return
     }
     if (method === 'edit') {
         const { data } = await collectionPointInstance.value.update(
@@ -332,7 +340,7 @@ const submitForm = async (method: "add" | "edit") => {
                     : collectionPointInstance.value.days
             }
         )
-
+            console.log(collectionPointInstance.value.buckets)
         for (let bucket of collectionPointInstance.value.buckets) {
             if (bucket.id) {
                 await bucketsInstance.value.updateBuckets(data.id, bucket.id, bucket)
@@ -340,6 +348,17 @@ const submitForm = async (method: "add" | "edit") => {
                 await bucketsInstance.value.createBuckets(data.id, bucket)
             }
         }
+
+        if(deleteBuckets.value.length){
+            for (let id of deleteBuckets.value) 
+            {
+               await bucketsInstance.value.deleteBuckets(data.id, Number(id))
+               deleteBuckets.value.pop()
+            }
+        }
+
+        emit("close", true)
+        return
     }
 }
 

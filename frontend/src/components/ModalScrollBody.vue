@@ -14,6 +14,7 @@
             type="text"
             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-60 disabled:bg-gray-100 enabled:bg-white"
             required
+            form="mainForm"
           />
         </div>
 

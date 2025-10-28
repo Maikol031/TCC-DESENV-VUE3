@@ -19,7 +19,6 @@ const title = ref<string>("");
 const route = useRoute();
 
 watch(()=> route.meta.title, (value)=> {
-    console.log(value)
     title.value = String(value);
 });
 

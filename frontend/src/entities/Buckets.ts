@@ -29,6 +29,10 @@ export default class Buckets implements Bucket {
         await api.put(`/api/v1/points/${pointId}/buckets/${id}`, body)
     }
 
+    async deleteBuckets(pointId: number, id: number) {
+        await api.delete(`/api/v1/points/${pointId}/buckets/${id}`)
+    }
+
 
 }
 

@@ -10,6 +10,7 @@
     :items="selectedCard" 
     :method="modalMethod"
     :userRole="userRole"
+    @close="getCollectionPoints(); isModalOpen = !isModalOpen"
   />
   <ModalConfirmeDelete 
     :is-open="isModalOpenModalDelete"
@@ -72,4 +73,3 @@ onMounted(async () => {
 
 
 </script>
-<style></style>

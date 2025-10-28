@@ -39,9 +39,16 @@ export default class Auth implements IAuth {
         }
     }
 
+    async inviteUser(email: string) {
+        await api.post('/api/v1/users/invite', { email }, {headers: {
+            Authorization: 'Bearer' + ' ' + localStorage.getItem("token")
+        }})
+    }
+
     logout() {
         localStorage.removeItem('token')
         localStorage.removeItem('user')
+        sessionStorage.removeItem('role')
         this.router?.push({ name: 'login' })
     }
 
