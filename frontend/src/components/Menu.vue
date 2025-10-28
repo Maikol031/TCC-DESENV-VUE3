@@ -74,7 +74,7 @@
         <span class="capitalize">{{ item.label }}</span>
       </router-link>
 
-      <button v-if="role === 'organization' || role === 'admin'" @click="isOpenModalInvite = !isOpenModalInvite" class="bg-green-700 hover:bg-green-900 flex items-center gap-x-4 ml-9 py-2 w-full rounded text-white font-medium cursor-pointer">
+      <button v-if="role === 'organization' || role === 'admin'" @click="isOpenModalInvite = !isOpenModalInvite" class="bg-green-700 hover:bg-green-900 flex items-center gap-x-2 pl-4 py-2 w-full rounded text-white font-medium cursor-pointer">
         <UserPlus class="w-5 h-5"/>
         <span>Convidar Usuário</span>
       </button>

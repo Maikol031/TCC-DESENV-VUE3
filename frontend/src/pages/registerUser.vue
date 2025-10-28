@@ -108,7 +108,6 @@ watch(()=> userInstance.value?.address?.zipcode, (novoCep: string) => {
 });
 
 const submitForm = async () => {
-    
     await userInstance.value.create({...userInstance.value, access_code: code })
     router.push({ name: 'login' })
 }
