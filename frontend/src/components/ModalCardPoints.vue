@@ -13,7 +13,7 @@
                             <span>Telefone:</span>
                             <input v-model="collectionPointInstance.phone" required
                                 class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
-                                :disabled="!isEditing || userRole === 'manager'" />
+                                :disabled="!isEditing || userRole !== 'admin' && userRole !== 'organization'" />
                         </li>
                     </ul>
                 </div>
@@ -29,37 +29,37 @@
                         <span>CEP:</span>
                         <input v-model="collectionPointInstance.address.zipcode" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
-                            :disabled="!isEditing || userRole === 'manager'" />
+                            :disabled="!isEditing || userRole !== 'admin' && userRole !== 'organization'" />
                     </li>
                     <li class="flex justify-between items-center text-gray-700">
                         <span>Rua:</span>
                         <input v-model="collectionPointInstance.address.street" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
-                            :disabled="!isEditing || userRole === 'manager'" />
+                            :disabled="!isEditing || userRole !== 'admin' && userRole !== 'organization'" />
                     </li>
                     <li class="flex justify-between items-center text-gray-700">
                         <span>Número:</span>
                         <input v-model="collectionPointInstance.address.number" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
-                            :disabled="!isEditing || userRole === 'manager'" />
+                            :disabled="!isEditing || userRole !== 'admin' && userRole !== 'organization'" />
                     </li>
                     <li class="flex justify-between items-center text-gray-700">
                         <span>Bairro:</span>
                         <input v-model="collectionPointInstance.address.neighborhood" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
-                            :disabled="!isEditing || userRole === 'manager'" />
+                            :disabled="!isEditing || userRole !== 'admin' && userRole !== 'organization'" />
                     </li>
                     <li class="flex justify-between items-center text-gray-700">
                         <span>Cidade:</span>
                         <input v-model="collectionPointInstance.address.city" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
-                            :disabled="!isEditing || userRole === 'manager'" />
+                            :disabled="!isEditing || userRole !== 'admin' && userRole !== 'organization'" />
                     </li>
                     <li class="flex justify-between items-center text-gray-700">
                         <span>Estado:</span>
                         <input v-model="collectionPointInstance.address.state" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
-                            :disabled="!isEditing || userRole === 'manager'" />
+                            :disabled="!isEditing || userRole !== 'admin' && userRole !== 'organization'" />
                     </li>
 
                 </ul>

@@ -29,13 +29,13 @@
       </div>
       <div class="flex">
         <button @click="$emit('item', item)"
-          class="w-full flex items-center justify-center gap-2 bg-green-700 hover:bg-green-600 text-white font-medium py-3 rounded-bl-xl transition cursor-pointer">
-          <InfoIcon class="w-5 h-5 text-white" />
+          class="w-full flex items-center justify-center gap-2 bg-stone-100 hover:bg-stone-200 text-gray-600 font-medium py-3 rounded-bl-xl transition cursor-pointer border-r border-white">
+          <InfoIcon class="w-5 h-5 text-gray-600" />
           Ver Detalhes
         </button>
-        <button @click="$emit('delete', item.id)"
-          class="w-full flex items-center justify-center gap-2 bg-red-700 hover:bg-red-600 text-white font-medium py-3 rounded-br-xl transition cursor-pointer">
-          <Trash2 class="w-5 h-5 text-white" />
+        <button v-if="userRole === 'admin' || userRole === 'organization'" @click="$emit('delete', item.id)"
+          class="w-full flex items-center justify-center gap-2 bg-stone-100 hover:bg-stone-200 text-gray-600 font-medium py-3 rounded-br-xl transition cursor-pointer border-l border-white">
+          <Trash2 class="w-5 h-5 text-gray-600" />
           Excluir
         </button>
       </div>
@@ -51,6 +51,7 @@ import type { ICollectionPoint } from "@/entities/CollectionPoint";
 
 interface Props {
   items: ICollectionPoint[]
+  userRole?: "admin" | "manager" | "organization"
 }
 
 defineProps<Props>()

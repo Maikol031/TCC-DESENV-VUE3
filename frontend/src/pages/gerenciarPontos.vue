@@ -3,7 +3,12 @@
     <div class="w-full flex justify-end">
       <button v-if="userRole === 'admin' || userRole === 'organization'" @click="openModalFunc('add')" class="bg-white rounded-md p-3 font-medium border border-gray-200 mr-2 flex gap-x-1 cursor-pointer hover:bg-slate-50 duration-300 shadow"> <PlusIcon/> Criar Ponto De Coleta</button>
     </div>
-    <CardPoints :items="items"  @item="openModalFunc('edit', $event)" @delete="openModalDelete($event)" />
+    <CardPoints 
+      :items="items"
+      :userRole="userRole"
+      @item="openModalFunc('edit', $event)" 
+      @delete="openModalDelete($event)" 
+    />
   </div>
   <ModalCardPoints 
     v-model:open="isModalOpen"

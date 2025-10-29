@@ -69,12 +69,12 @@
     <div v-if="menuAberto" class="fixed z-50 top-13 left-0 w-full bg-green-700 flex flex-col items-center md:hidden">
       <router-link v-for="item in rotas" :key="item.name" :to="item.name === 'login' ? '' : { name: item.name }" class="flex items-center justify-start w-full h-12 font-medium text-white px-4
                transform transition-all duration-200 hover:scale-105 border-b-1 border-gray-200 gap-x-2"
-        @click="item.label === 'logout' ? openModalConfirmLogout() : openModalPreLogin(item.name)">
+        @click="item.label === 'logout' ? openModalConfirmLogout() : openModalPreLogin(item.name); menuAberto = !menuAberto">
         <component :is="item.icon" class="w-5 h-5 text-white" />
         <span class="capitalize">{{ item.label }}</span>
       </router-link>
 
-      <button v-if="role === 'organization' || role === 'admin'" @click="isOpenModalInvite = !isOpenModalInvite" class="bg-green-700 hover:bg-green-900 flex items-center gap-x-2 pl-4 py-2 w-full rounded text-white font-medium cursor-pointer">
+      <button v-if="role === 'organization' || role === 'admin'" @click="isOpenModalInvite = !isOpenModalInvite; menuAberto = !menuAberto" class="bg-green-700 hover:bg-green-900 flex items-center gap-x-2 pl-4 py-2 w-full rounded text-white font-medium cursor-pointer">
         <UserPlus class="w-5 h-5"/>
         <span>Convidar Usuário</span>
       </button>
