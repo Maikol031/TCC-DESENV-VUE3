@@ -63,7 +63,7 @@
     </p>
     <div class="flex justify-center">
       <button
-        @click="routeToSelected"
+        @click="emit('seeDetails', selectedDestination)"
         class="bg-blue-500 hover:bg-blue-600 p-2 rounded-sm text-white cursor-pointer"
       >
         Ver detalhes
@@ -88,7 +88,8 @@ interface Props {
   trace: boolean
   destinations: Array<Pick<ICollectionPoint, 'latitude' | 'longitude' | 'name' | 'id'>>
   traceDestination: Pick<ICollectionPoint, 'latitude' | 'longitude' | 'name'>,
-  currentLocale: { latitude: number; longitude: number; name: string }
+  currentLocale: { latitude: number; longitude: number; name: string },
+  closeDestination: boolean
 }
 
 const props = defineProps<Props>()
@@ -100,6 +101,11 @@ let directionsRenderer: any
 let directionsService: any
 const selectedDestination = ref<{ lat: number; lng: number; name?: string; id: number } | null>()
 const pointName = ref<string>('')
+
+
+watch(()=> props.closeDestination, ()=> {
+  selectedDestination.value = null
+})
 
 // Valida e define center apenas se latitude e longitude forem números válidos
 if (
@@ -134,6 +140,10 @@ watch(
   { immediate: true }
 );
 
+watch(()=> props.traceDestination, ()=> {
+  traceRouteTo({lat: Number(props.traceDestination.latitude), lng: Number(props.traceDestination.longitude) })
+})
+
 
 function traceRouteTo(destination: { lat: number; lng: number }) {
   console.log(destination)
@@ -163,12 +173,12 @@ function onMarkerClick(dest: { lat: number; lng: number; name?: string; id: numb
 
 function routeToSelected() {
   if (!center.value) return
-  emit("seeDetails", selectedDestination.value)
-  // const origin = `${center.value.lat},${center.value.lng}`
-  // const destination = selectedDestination.value ? `${selectedDestination.value.lat},${selectedDestination.value.lng}` : `${props.traceDestination.latitude},${props.traceDestination.longitude}`
-  // console.log(destination)
-  // const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`
-  // window.open(url, '_blank')
+  
+  const origin = `${center.value.lat},${center.value.lng}`
+  const destination = selectedDestination.value ? `${selectedDestination.value.lat},${selectedDestination.value.lng}` : `${props.traceDestination.latitude},${props.traceDestination.longitude}`
+  console.log(destination)
+  const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`
+  window.open(url, '_blank')
 }
 
 watch(() => props.currentLocale, () => {

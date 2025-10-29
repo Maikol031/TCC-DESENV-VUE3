@@ -4,15 +4,17 @@
     </div>
     <div class="flex flex-col items-center gap-y-3 mb-10">
 
-        <DynamicCarousel @item="openModalFunc($event)" :items="items" />
+        <DynamicCarousel @item="openModalFunc($event); closeDestination = !closeDestination" :items="items" />
     </div>
     <div class="flex justify-start md:m-14">
         <Maps :trace="traceRout" 
             :destinations="items"
+            :closeDestination="closeDestination"
             :trace-destination="traceTest"
             :current-locale="{ latitude: latitude, longitude: longitude, name: 'Você está aqui' }"
             @traced="resetTrace"
-            @see-details="($event)=> openModalFunc(items.find((values) => values.id === $event.id))" />
+            @see-details="($event)=> openModalFunc(items.find((values) => values.id === $event.id))" 
+        />
 
     </div>
 
@@ -27,7 +29,7 @@ import { onMounted, ref } from 'vue';
 
 const collectionPointInstance = ref<CollectionPoint>(new CollectionPoint())
 const items = ref<ICollectionPoint[]>([])
-
+const closeDestination = ref<boolean>(false)
 
 
 const latitude = ref<number>(0)
@@ -86,6 +88,7 @@ const traceTest = ref()
 const trace = (values: any) => {
     traceTest.value = values
     traceRout.value = true
+    isModalOpen.value = !isModalOpen.value
 }
 
 const resetTrace = () => {
