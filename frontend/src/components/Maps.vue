@@ -61,12 +61,12 @@
       Lat: {{ selectedDestination.lat.toFixed(6) }}, Lng:
       {{ selectedDestination.lng.toFixed(6) }}
     </p>
-    <div class="flex justify-around">
+    <div class="flex justify-center">
       <button
         @click="routeToSelected"
         class="bg-blue-500 hover:bg-blue-600 p-2 rounded-sm text-white cursor-pointer"
       >
-        Iniciar percurso
+        Ver detalhes
       </button>
       <button
         @click="selectedDestination = null"
@@ -86,19 +86,19 @@ import type { ICollectionPoint } from '@/entities/CollectionPoint'
 
 interface Props {
   trace: boolean
-  destinations: Array<Pick<ICollectionPoint, 'latitude' | 'longitude' | 'name'>>
+  destinations: Array<Pick<ICollectionPoint, 'latitude' | 'longitude' | 'name' | 'id'>>
   traceDestination: Pick<ICollectionPoint, 'latitude' | 'longitude' | 'name'>,
   currentLocale: { latitude: number; longitude: number; name: string }
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits(['traced'])
+const emit = defineEmits(['traced', 'seeDetails'])
 
 const mapRef = ref<any>(null)
 const center = ref<{ lat: number; lng: number } | null>(null)
 let directionsRenderer: any
 let directionsService: any
-const selectedDestination = ref<{ lat: number; lng: number; name?: string } | null>()
+const selectedDestination = ref<{ lat: number; lng: number; name?: string; id: number } | null>()
 const pointName = ref<string>('')
 
 // Valida e define center apenas se latitude e longitude forem números válidos
@@ -117,7 +117,7 @@ if (
 }
 
 // Processa destinos garantindo lat/lng válidos
-const destinations = ref<{ lat: number; lng: number; name: string }[]>([]);
+const destinations = ref<{ lat: number; lng: number; name: string; id: number }[]>([]);
 
 watch(
   () => props.destinations,
@@ -126,7 +126,8 @@ watch(
       .map(dest => ({
         lat: Number(dest.latitude),
         lng: Number(dest.longitude),
-        name: dest.name
+        name: dest.name,
+        id: dest.id
       }))
       .filter(dest => !isNaN(dest.lat) && !isNaN(dest.lng));
   },
@@ -135,6 +136,7 @@ watch(
 
 
 function traceRouteTo(destination: { lat: number; lng: number }) {
+  console.log(destination)
   if (!center.value || !destination || !directionsService || !directionsRenderer) return
 
   directionsService.route(
@@ -153,7 +155,7 @@ function traceRouteTo(destination: { lat: number; lng: number }) {
   )
 }
 
-function onMarkerClick(dest: { lat: number; lng: number; name?: string }) {
+function onMarkerClick(dest: { lat: number; lng: number; name?: string; id: number }) {
   selectedDestination.value = dest
   pointName.value = dest.name ?? ''
   traceRouteTo(dest)
@@ -161,12 +163,12 @@ function onMarkerClick(dest: { lat: number; lng: number; name?: string }) {
 
 function routeToSelected() {
   if (!center.value) return
-  
-  const origin = `${center.value.lat},${center.value.lng}`
-  const destination = selectedDestination.value ? `${selectedDestination.value.lat},${selectedDestination.value.lng}` : `${props.traceDestination.latitude},${props.traceDestination.longitude}`
-  console.log(destination)
-  const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`
-  window.open(url, '_blank')
+  emit("seeDetails", selectedDestination.value)
+  // const origin = `${center.value.lat},${center.value.lng}`
+  // const destination = selectedDestination.value ? `${selectedDestination.value.lat},${selectedDestination.value.lng}` : `${props.traceDestination.latitude},${props.traceDestination.longitude}`
+  // console.log(destination)
+  // const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`
+  // window.open(url, '_blank')
 }
 
 watch(() => props.currentLocale, () => {

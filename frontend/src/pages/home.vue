@@ -11,18 +11,19 @@
             :destinations="items"
             :trace-destination="traceTest"
             :current-locale="{ latitude: latitude, longitude: longitude, name: 'Você está aqui' }"
-            @traced="resetTrace" />
+            @traced="resetTrace"
+            @see-details="($event)=> openModalFunc(items.find((values) => values.id === $event.id))" />
 
     </div>
 
     <ModalCardHome v-model:open="isModalOpen" :items="selectedCard" @trace="trace($event)" />
 </template>
 <script setup lang="ts">
+import CollectionPoint, { type ICollectionPoint } from "@/entities/CollectionPoint";
 import DynamicCarousel from '@/components/DynamicCarousel.vue';
+import ModalCardHome from '@/components/ModalCardHome.vue';
 import Maps from '@/components/Maps.vue';
 import { onMounted, ref } from 'vue';
-import ModalCardHome from '@/components/ModalCardHome.vue';
-import CollectionPoint, { type ICollectionPoint } from "@/entities/CollectionPoint";
 
 const collectionPointInstance = ref<CollectionPoint>(new CollectionPoint())
 const items = ref<ICollectionPoint[]>([])
