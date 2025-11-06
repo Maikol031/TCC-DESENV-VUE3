@@ -1,6 +1,6 @@
 <template>
-  <Dialog v-model:open="localOpen">
-    <DialogContent class="sm:max-w-[425px]">
+  <Dialog v-model:open="localOpen" class="z-100">
+    <DialogContent class="sm:max-w-[425px] z-100">
       <DialogHeader>
         <DialogTitle class="flex items-center gap-2 text-red-700 font-bold text-2xl">
           <Trash class="w-6 h-6" />

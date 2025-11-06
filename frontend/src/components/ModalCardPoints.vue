@@ -155,32 +155,42 @@
         <template #actions>
 
             <div class="flex justify-end w-full">
+                <button v-if="userRole === 'organization'" @click="isModalGestoresOpen = !isModalGestoresOpen; open = !open" form="mainForm"
+                    class="flex gap-x-3 items-center bg-gray-300 text-black p-2 mr-2 rounded-sm cursor-pointer hover:bg-gray-400 duration-300">
+                    <Users class="text-black w-5 h-5" />
+                    Gestores
+                </button>
                 <button v-if="isEditing === false && method === 'edit'"
                     class="flex gap-x-3 items-center bg-blue-600 text-white p-2 rounded-sm cursor-pointer hover:bg-blue-700 duration-300"
                     @click="isEditing = !isEditing">
                     <Edit class="text-white w-5 h-5" />
                     Editar
                 </button>
-                <button v-if="isEditing === true || method === 'add'"
-                    type="submit"
-                    form="mainForm"
-                    class="flex gap-x-3 items-center bg-green-600 text-white p-2 rounded-sm cursor-pointer hover:bg-green-700 duration-300"
-                >
+                <button v-if="isEditing === true || method === 'add'" type="submit" form="mainForm"
+                    class="flex gap-x-3 items-center bg-green-600 text-white p-2 rounded-sm cursor-pointer hover:bg-green-700 duration-300">
                     <Save class="text-white w-5 h-5" />
                     Salvar
                 </button>
+
             </div>
 
         </template>
     </ModalScrollBody>
+    <ModalCardColaboradores 
+        v-model:open="isModalGestoresOpen"
+        @close="isModalGestoresOpen = !isModalGestoresOpen"
+        :user-role="userRole"
+        :point-id="items?.id"
+        />
 </template>
 
 <script setup lang="ts">
 import CollectionPoint, { type ICollectionPoint, type PointOpeningHour } from '@/entities/CollectionPoint';
 import ModalScrollBody from './ModalScrollBody.vue';
-import { Edit, Save } from 'lucide-vue-next';
+import { Edit, Save, Users } from 'lucide-vue-next';
 import { ref, watch } from 'vue'
 import Buckets, { type Bucket } from '@/entities/Buckets';
+import ModalCardColaboradores from './ModalCardColaboradores.vue';
 
 interface Props {
     items?: ICollectionPoint
@@ -193,6 +203,7 @@ const modalName = ref('')
 const mainForm = ref(null)
 const props = defineProps<Props>()
 const emit = defineEmits(["close"])
+const isModalGestoresOpen = ref<boolean>(false)
 
 
 const collectionPointInstance = ref<CollectionPoint>(new CollectionPoint())
@@ -258,7 +269,6 @@ function addDay() {
 }
 
 function removeDay(idx: number, item: any) {
-    console.log(item)
     collectionPointInstance.value.days.splice(idx, 1)
 }
 
@@ -290,7 +300,7 @@ function addBucket() {
 
 const deleteBuckets = ref<Bucket[]>([])
 function removeBucket(idx: number, item: any) {
-    if(item.id) deleteBuckets.value.push(item.id)
+    if (item.id) deleteBuckets.value.push(item.id)
 
     collectionPointInstance.value.buckets.splice(idx, 1)
 }
@@ -340,7 +350,6 @@ const submitForm = async (method: "add" | "edit") => {
                     : collectionPointInstance.value.days
             }
         )
-            console.log(collectionPointInstance.value.buckets)
         for (let bucket of collectionPointInstance.value.buckets) {
             if (bucket.id) {
                 await bucketsInstance.value.updateBuckets(data.id, bucket.id, bucket)
@@ -349,11 +358,10 @@ const submitForm = async (method: "add" | "edit") => {
             }
         }
 
-        if(deleteBuckets.value.length){
-            for (let id of deleteBuckets.value) 
-            {
-               await bucketsInstance.value.deleteBuckets(data.id, Number(id))
-               deleteBuckets.value.pop()
+        if (deleteBuckets.value.length) {
+            for (let id of deleteBuckets.value) {
+                await bucketsInstance.value.deleteBuckets(data.id, Number(id))
+                deleteBuckets.value.pop()
             }
         }
 

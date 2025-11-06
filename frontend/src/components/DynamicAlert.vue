@@ -6,6 +6,7 @@
     leave-active-class="transition duration-200 ease-in"
     leave-from-class="transform translate-y-0 opacity-100"
     leave-to-class="transform -translate-y-2 opacity-0"
+    class="z-200"
   >
     <Alert 
       v-if="alertState.show" 
@@ -19,7 +20,7 @@
     >
       <component 
         :is="alertIcon" 
-        class="w-4 h-4"
+        class="w-4 h-4 z-200"
         :class="[
           alertState.type === 'error' ? 'text-red-500' :
           alertState.type === 'success' ? 'text-green-500' :

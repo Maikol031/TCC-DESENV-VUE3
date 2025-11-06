@@ -59,8 +59,8 @@
 import { ref } from 'vue'
 import { Eye, EyeOffIcon, House } from 'lucide-vue-next';
 import Auth from '@/entities/Auth';
-import { useAlert } from '@/composables/useAlert'
 import { router } from '@/routes';
+import { useAlert } from '@/composables/useAlert'
 
 const { showAlert } = useAlert()
 const showPassword = ref(false)

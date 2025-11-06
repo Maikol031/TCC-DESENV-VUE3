@@ -1,5 +1,5 @@
 <template>
-    <Carousel class="relative w-full max-w-6xl" :opts="{
+    <Carousel class="relative w-full max-w-6xl md:max-w-xl lg:max-w-2xl xl:max-w-6xl" :opts="{
         align: 'start',
     }">
         <CarouselContent>

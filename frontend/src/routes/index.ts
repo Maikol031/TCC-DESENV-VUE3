@@ -25,7 +25,7 @@ const routes = [
         meta: {
             requiresAuth: true,
             layout: "AppLayoutDefault",
-            title: "Gerenciar Pontos De Coleta"
+            title: "Gerenciar Pontos de Coleta"
         }
     },
     {
@@ -47,7 +47,7 @@ const routes = [
             layout: "AppLayoutBlank",
             title: "NewAcount"
         }
-    }
+    },
 ]
 
 
