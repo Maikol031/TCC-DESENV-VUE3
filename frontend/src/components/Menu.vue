@@ -88,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import { House, ClipboardPenLine, LogIn, Recycle, LogOut, UserPlus, Users } from "lucide-vue-next";
+import { House, ClipboardPenLine, LogIn, Recycle, LogOut, UserPlus } from "lucide-vue-next";
 import ModalConfirmLogout from "./ModalConfirmLogout.vue";
 import { useRoute, useRouter } from 'vue-router';
 import ModalPreLogin from "./ModalPreLogin.vue";

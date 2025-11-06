@@ -1,15 +1,15 @@
 <template>
-    <ModalScrollBody v-model:open="open" v-model:name="modalName" :title="items?.name ?? ''" :enable-footer="true"
+    <ModalScrollBody v-model:open="open" v-model:name="modalName" :title="colaboratorInstances?.name ?? ''" :enable-footer="true"
         :enable-input-name="method === 'add'">
         <template #body>
             <form id="mainForm" ref="mainForm" @submit.prevent="submitForm(method)" class="flex flex-col gap-y-4">
                 <hr>
                 <div>
-                    <div class="flex gap-x-4 items-center justify-between">
+                    <div class="flex gap-x-4 colaboratorInstances-center justify-between">
                         <span class="text-gray-700 text-xl font-medium">Contato</span>
                     </div>
                     <ul class="px-2 space-y-1 list-none">
-                        <li class="flex justify-between items-center text-gray-700">
+                        <li class="flex justify-between colaboratorInstances-center text-gray-700">
                             <span>Telefone:</span>
                             <input v-model="collectionPointInstance.phone" required
                                 class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
@@ -20,42 +20,42 @@
 
                 <hr>
                 <div>
-                    <div class="flex gap-x-4 items-center justify-between">
+                    <div class="flex gap-x-4 colaboratorInstances-center justify-between">
                         <span class="text-gray-700 text-xl font-medium">Endereço</span>
                     </div>
                 </div>
                 <ul class="px-2 space-y-1 list-none">
-                    <li class="flex justify-between items-center text-gray-700">
+                    <li class="flex justify-between colaboratorInstances-center text-gray-700">
                         <span>CEP:</span>
                         <input v-model="collectionPointInstance.address.zipcode" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
                             :disabled="!isEditing || userRole !== 'admin' && userRole !== 'organization'" />
                     </li>
-                    <li class="flex justify-between items-center text-gray-700">
+                    <li class="flex justify-between colaboratorInstances-center text-gray-700">
                         <span>Rua:</span>
                         <input v-model="collectionPointInstance.address.street" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
                             :disabled="!isEditing || userRole !== 'admin' && userRole !== 'organization'" />
                     </li>
-                    <li class="flex justify-between items-center text-gray-700">
+                    <li class="flex justify-between colaboratorInstances-center text-gray-700">
                         <span>Número:</span>
                         <input v-model="collectionPointInstance.address.number" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
                             :disabled="!isEditing || userRole !== 'admin' && userRole !== 'organization'" />
                     </li>
-                    <li class="flex justify-between items-center text-gray-700">
+                    <li class="flex justify-between colaboratorInstances-center text-gray-700">
                         <span>Bairro:</span>
                         <input v-model="collectionPointInstance.address.neighborhood" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
                             :disabled="!isEditing || userRole !== 'admin' && userRole !== 'organization'" />
                     </li>
-                    <li class="flex justify-between items-center text-gray-700">
+                    <li class="flex justify-between colaboratorInstances-center text-gray-700">
                         <span>Cidade:</span>
                         <input v-model="collectionPointInstance.address.city" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
                             :disabled="!isEditing || userRole !== 'admin' && userRole !== 'organization'" />
                     </li>
-                    <li class="flex justify-between items-center text-gray-700">
+                    <li class="flex justify-between colaboratorInstances-center text-gray-700">
                         <span>Estado:</span>
                         <input v-model="collectionPointInstance.address.state" required
                             class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded border border-gray-300 w-48 disabled:bg-gray-100 enabled:bg-white"
@@ -64,23 +64,23 @@
 
                 </ul>
                 <hr>
-                <div class="flex gap-x-4 items-center justify-between">
+                <div class="flex gap-x-4 colaboratorInstances-center justify-between">
                     <span class="text-gray-700 text-xl font-medium">Horários de Funcionamento</span>
                 </div>
                 <ul class="mb-4">
-                    <li v-for="(item, idx) in collectionPointInstance.days" :key="item.day_of_week"
-                        class="flex items-center gap-3 mb-2">
-                        <span class="w-32">{{ daysOfWeek[item.day_of_week] }}</span>
-                        <span class="w-32 text-end">{{ item.opening_hour.slice(0, 5) }} - {{ item.closing_hour.slice(0,
+                    <li v-for="(colaboratorInstance, idx) in collectionPointInstance.days" :key="colaboratorInstance.day_of_week"
+                        class="flex colaboratorInstances-center gap-3 mb-2">
+                        <span class="w-32">{{ daysOfWeek[colaboratorInstance.day_of_week] }}</span>
+                        <span class="w-32 text-end">{{ colaboratorInstance.opening_hour.slice(0, 5) }} - {{ colaboratorInstance.closing_hour.slice(0,
                             5) }}</span>
                         <button v-if="isEditing" class="ml-2 bg-red-500 text-white rounded px-2 py-1 hover:bg-red-700"
-                            @click="removeDay(idx, item)">
+                            @click="removeDay(idx, colaboratorInstance)">
                             Remover
                         </button>
                     </li>
                 </ul>
                 <form v-if="isEditing" @submit.prevent="addDay" class="flex flex-col gap-2">
-                    <div class="flex flex-wrap items-center gap-2">
+                    <div class="flex flex-wrap colaboratorInstances-center gap-2">
                         <select v-model="newDay.day_of_week" class="border rounded px-2 py-1 flex-1">
                             <option disabled value="">Selecione um dia</option>
                             <option v-for="(label, index) in daysOfWeek" :key="index" :value="index"
@@ -102,7 +102,7 @@
 
                 <hr>
                 <div class="flex flex-col gap-x-4">
-                    <div class="flex gap-x-4 items-center justify-between mb-2">
+                    <div class="flex gap-x-4 colaboratorInstances-center justify-between mb-2">
                         <span class="text-gray-700 text-xl font-medium">Caçambas</span>
                     </div>
                     <div class="flex flex-wrap mb-2 gap-2">
@@ -118,7 +118,7 @@
                             <span>|</span>
                         </template>
                     </div>
-                    <form v-if="isEditing" @submit.prevent="addBucket" class="flex flex-wrap gap-2 items-center mt-2">
+                    <form v-if="isEditing" @submit.prevent="addBucket" class="flex flex-wrap gap-2 colaboratorInstances-center mt-2">
                         <select v-model="newBucket.type" class="border rounded px-2 py-1 min-w-[120px]">
                             <option disabled value="">Selecione o tipo</option>
                             <option v-for="type in bucketTypes" :key="type" :value="type"
@@ -138,13 +138,13 @@
                             :disabled="!newBucket.type || !newBucket.status">Adicionar</button>
                     </form>
                     <div class="flex gap-7 mt-2">
-                        <span class="flex gap-2 items-center text-green-600">
+                        <span class="flex gap-2 colaboratorInstances-center text-green-600">
                             <Circle size="12" />Vazia
                         </span>
-                        <span class="flex gap-2 items-center text-yellow-500">
+                        <span class="flex gap-2 colaboratorInstances-center text-yellow-500">
                             <Circle size="12" />Parcial
                         </span>
-                        <span class="flex gap-2 items-center text-red-500">
+                        <span class="flex gap-2 colaboratorInstances-center text-red-500">
                             <Circle size="12" />Lotada
                         </span>
                     </div>
@@ -156,18 +156,18 @@
 
             <div class="flex justify-end w-full">
                 <button v-if="userRole === 'organization'" @click="isModalGestoresOpen = !isModalGestoresOpen; open = !open" form="mainForm"
-                    class="flex gap-x-3 items-center bg-gray-300 text-black p-2 mr-2 rounded-sm cursor-pointer hover:bg-gray-400 duration-300">
+                    class="flex gap-x-3 colaboratorInstances-center bg-gray-300 text-black p-2 mr-2 rounded-sm cursor-pointer hover:bg-gray-400 duration-300">
                     <Users class="text-black w-5 h-5" />
                     Gestores
                 </button>
                 <button v-if="isEditing === false && method === 'edit'"
-                    class="flex gap-x-3 items-center bg-blue-600 text-white p-2 rounded-sm cursor-pointer hover:bg-blue-700 duration-300"
+                    class="flex gap-x-3 colaboratorInstances-center bg-blue-600 text-white p-2 rounded-sm cursor-pointer hover:bg-blue-700 duration-300"
                     @click="isEditing = !isEditing">
                     <Edit class="text-white w-5 h-5" />
                     Editar
                 </button>
                 <button v-if="isEditing === true || method === 'add'" type="submit" form="mainForm"
-                    class="flex gap-x-3 items-center bg-green-600 text-white p-2 rounded-sm cursor-pointer hover:bg-green-700 duration-300">
+                    class="flex gap-x-3 colaboratorInstances-center bg-green-600 text-white p-2 rounded-sm cursor-pointer hover:bg-green-700 duration-300">
                     <Save class="text-white w-5 h-5" />
                     Salvar
                 </button>
@@ -180,7 +180,7 @@
         v-model:open="isModalGestoresOpen"
         @close="isModalGestoresOpen = !isModalGestoresOpen"
         :user-role="userRole"
-        :point-id="items?.id"
+        :point-id="colaboratorInstances?.id"
         />
 </template>
 
@@ -193,7 +193,7 @@ import Buckets, { type Bucket } from '@/entities/Buckets';
 import ModalCardColaboradores from './ModalCardColaboradores.vue';
 
 interface Props {
-    items?: ICollectionPoint
+    colaboratorInstances?: ICollectionPoint
     userRole?: "admin" | "manager" | "organization"
     method: "add" | "edit"
 }
@@ -257,7 +257,7 @@ const newDay = ref<{ day_of_week: string | "", opening_hour: string, closing_hou
 function addDay() {
     if (
         newDay.value.day_of_week !== "" &&
-        !collectionPointInstance.value.days.some(item => item.day_of_week === String(newDay.value.day_of_week))
+        !collectionPointInstance.value.days.some(colaboratorInstance => colaboratorInstance.day_of_week === String(newDay.value.day_of_week))
     ) {
         collectionPointInstance.value.days.push({
             day_of_week: String(newDay.value.day_of_week),
@@ -268,7 +268,7 @@ function addDay() {
     }
 }
 
-function removeDay(idx: number, item: any) {
+function removeDay(idx: number) {
     collectionPointInstance.value.days.splice(idx, 1)
 }
 
@@ -299,8 +299,8 @@ function addBucket() {
 }
 
 const deleteBuckets = ref<Bucket[]>([])
-function removeBucket(idx: number, item: any) {
-    if (item.id) deleteBuckets.value.push(item.id)
+function removeBucket(idx: number, colaboratorInstance: any) {
+    if (colaboratorInstance.id) deleteBuckets.value.push(colaboratorInstance.id)
 
     collectionPointInstance.value.buckets.splice(idx, 1)
 }
@@ -373,7 +373,7 @@ const submitForm = async (method: "add" | "edit") => {
 watch(open, (isOpen) => {
     if (isOpen) {
         if (props.method === 'edit') {
-            Object.assign(collectionPointInstance.value, props.items)
+            Object.assign(collectionPointInstance.value, props.colaboratorInstances)
             isEditing.value = false
         }
         if (props.method === 'add') {
